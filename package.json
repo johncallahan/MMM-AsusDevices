@@ -5,7 +5,8 @@
   "main": "MMM-AsusDevices.js",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "probe": "node scripts/probe.js"
+    "probe": "node scripts/probe.js",
+    "install-ssh": "npm install --no-save --omit=optional ssh2@^1.16.0"
   },
   "keywords": [
     "MagicMirror",
@@ -19,8 +20,5 @@
   "license": "MIT",
   "engines": {
     "node": ">=18"
-  },
-  "optionalDependencies": {
-    "ssh2": "^1.16.0"
   }
 }

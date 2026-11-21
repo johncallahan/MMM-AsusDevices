@@ -16,10 +16,21 @@ A [MagicMirror²](https://magicmirror.builders) module that shows the devices co
 
 ```bash
 cd ~/MagicMirror/modules
-# copy or unzip the MMM-AsusDevices folder here, then:
-cd MMM-AsusDevices
-npm install          # only needed for method: "ssh" (installs ssh2); harmless otherwise
+# copy or unzip the MMM-AsusDevices folder here
 ```
+
+That's it for the default web-API method: the module has **no dependencies**, so you don't need `npm install`.
+
+If you want `method: "ssh"`, also run:
+
+```bash
+cd MMM-AsusDevices
+npm run install-ssh   # installs ssh2 and skips its optional native add-on (cpu-features)
+```
+
+The module needs **Node 18 or newer** (MagicMirror 2.38 itself needs Node 22). Check with `node -v`. If you see
+`SyntaxError` in `node_modules/buildcheck/lib/index.js` with `catch {}`, the `node` on your PATH is very old (older
+than v10). Use the same Node that runs MagicMirror, for example by putting your nvm or NodeSource `node` first on PATH.
 
 Before you edit the mirror config, check that the module can talk to your router:
 
@@ -142,7 +153,7 @@ For example, another module could play a chime or show an alert when a particula
 
 | | `http` (default) | `ssh` |
 |---|---|---|
-| Setup | Nothing extra | Enable SSH, `npm install` |
+| Setup | Nothing extra | Enable SSH, `npm run install-ssh` |
 | Data source | Router's Network Map | Router's client list plus the radios directly |
 | AiMesh node clients | ✓ | ✓ when `/tmp/clientlist.json` exists, otherwise wired detection is approximate |
 | Affected by web UI lockouts / CAPTCHA | Yes | No |
@@ -164,7 +175,8 @@ Merlin **388.10** had HTTP daemon crash issues with API clients. Use 388.10_2 or
 ## Development
 
 ```bash
-npm test                                         # 23 tests: mock router, TLS, error codes, SSH (real ssh2 server)
+npm test                                         # 23 tests: mock router, TLS, error codes, SSH
+                                                 # (the end-to-end SSH test is skipped until `npm run install-ssh`)
 node test/mock-router.js --port 8080 --churn     # fake router (admin/password) with devices coming and going
 ```
 

@@ -154,7 +154,14 @@ test("custom_clientlist parsing", () => {
 });
 
 // ---- end-to-end through a real SSH server --------------------------------
-test("AsusSshClient end-to-end against an ssh2 test server", async () => {
+let ssh2Available = true;
+try {
+	require.resolve("ssh2");
+} catch {
+	ssh2Available = false;
+}
+
+test("AsusSshClient end-to-end against an ssh2 test server", { skip: !ssh2Available && "ssh2 not installed (npm run install-ssh)" }, async () => {
 	const { Server, utils } = require("ssh2");
 	const bin = makeStubBin();
 	const hostKey = utils.generateKeyPairSync("ed25519").private;
