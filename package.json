@@ -1,0 +1,26 @@
+{
+  "name": "mmm-asusdevices",
+  "version": "1.0.0",
+  "description": "MagicMirror² module that shows the devices connected to an Asuswrt / Asuswrt-Merlin router in real time",
+  "main": "MMM-AsusDevices.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "probe": "node scripts/probe.js"
+  },
+  "keywords": [
+    "MagicMirror",
+    "asus",
+    "asuswrt",
+    "merlin",
+    "router",
+    "network",
+    "devices"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "optionalDependencies": {
+    "ssh2": "^1.16.0"
+  }
+}
