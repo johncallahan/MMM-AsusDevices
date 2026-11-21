@@ -45,6 +45,7 @@ Module.register("MMM-AsusDevices", {
 		highlightNew: 5 * 60 * 1000, // highlight devices that joined in the last N ms (0 = off)
 		showDeparted: 2 * 60 * 1000, // keep departed devices visible, faded, for N ms (0 = off)
 		hideWhenEmpty: false,
+		scale: 1,                  // size multiplier for the whole module incl. header, e.g. 1.5
 		animationSpeed: 1000,
 		broadcastNotifications: true // send ASUS_DEVICES / ASUS_DEVICE_JOINED / ASUS_DEVICE_LEFT
 	},
@@ -90,6 +91,17 @@ Module.register("MMM-AsusDevices", {
 			}, 30 * 1000);
 		}
 		this.updateDom(0);
+	},
+
+	notificationReceived (notification) {
+		if (notification === "DOM_OBJECTS_CREATED") this.applyScale();
+	},
+
+	/** Enlarge or shrink the whole module (header included) by config.scale. */
+	applyScale () {
+		const scale = Number(this.config.scale) || 1;
+		const moduleEl = document.getElementById(this.identifier);
+		if (moduleEl && scale !== 1) moduleEl.style.zoom = String(scale);
 	},
 
 	socketNotificationReceived (notification, payload) {

@@ -115,6 +115,7 @@ Then use `"${SECRET_ASUS_PASSWORD}"` in `config.js`, as shown above. Browsers sh
 | `highlightNew` | `300000` | Highlight devices that joined in the last N ms (`0` turns it off). |
 | `showDeparted` | `120000` | Keep departed devices visible, faded, for N ms (`0` turns it off). |
 | `hideWhenEmpty` | `false` | Render nothing when no devices match. |
+| `scale` | `1` | Size multiplier for the whole module, header included. `1.5` = 50% larger, `0.8` = smaller. |
 | `broadcastNotifications` | `true` | Send notifications to other modules (see below). |
 
 ### Examples
@@ -142,6 +143,25 @@ config: {
   nodeNames: { "04:D9:F5:AA:BB:CC": "Main", "10:7B:44:01:02:03": "Upstairs" }
 }
 ```
+
+## Placing it on the right, vertically centred
+
+MagicMirror has no "middle right" position: the middle row only has `middle_center`. Use `position: "middle_center"`
+and add this to your custom CSS file. That's `css/custom.css` on older MagicMirror versions and `config/custom.css` on newer ones.
+Create the file if it doesn't exist.
+
+```css
+/* MMM-AsusDevices: right-hand side, vertically centred */
+.region.middle.center .MMM-AsusDevices {
+  width: -webkit-fit-content;
+  width: fit-content;
+  margin-left: auto;   /* push to the right edge */
+  text-align: right;
+}
+```
+
+If you'd rather keep `position: "top_right"`, you can push the module further down the screen instead:
+`.region.top.right .MMM-AsusDevices { margin-top: 20vh; }`.
 
 ## Notifications for other modules
 
