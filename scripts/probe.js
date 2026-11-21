@@ -61,10 +61,15 @@ async function main () {
 				ip: d.ip || "",
 				mac: d.mac,
 				link: d.connection + (d.guest ? " (guest)" : ""),
-				rssi: d.rssi ?? "",
+				rssi: d.rssi === null || d.rssi === undefined ? "" : d.rssi,
 				up: d.connectedSeconds !== null ? `${Math.round(d.connectedSeconds / 60)}m` : ""
 			}));
-		console.table(rows);
+		if (console.table) {
+			console.table(rows);
+		} else {
+			// Node < 10 has no console.table
+			for (const r of rows) console.log([r.name, r.ip, r.mac, r.link, r.rssi, r.up].join("\t"));
+		}
 		console.log(`${devices.length} devices in ${Date.now() - started} ms — the module will work with these settings.`);
 	} catch (err) {
 		console.error(`FAILED [${err.kind || err.code || "ERROR"}]: ${err.message}`);

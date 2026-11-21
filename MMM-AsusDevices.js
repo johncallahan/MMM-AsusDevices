@@ -127,6 +127,11 @@ Module.register("MMM-AsusDevices", {
 
 	// ---------- helpers ----------
 
+	/** value, or fallback when null/undefined (avoids ?? for older Electron builds) */
+	orDefault (value, fallback) {
+		return value === null || value === undefined ? fallback : value;
+	},
+
 	normMac (mac) {
 		return String(mac || "").trim().toUpperCase().replace(/-/g, ":");
 	},
@@ -185,8 +190,8 @@ Module.register("MMM-AsusDevices", {
 			name: byName,
 			ip: (a, b) => this.ipValue(a.ip) - this.ipValue(b.ip),
 			connection: (a, b) => (connOrder[a.connection] - connOrder[b.connection]) || byName(a, b),
-			signal: (a, b) => ((b.rssi ?? -999) - (a.rssi ?? -999)) || byName(a, b),
-			uptime: (a, b) => ((this.uptimeSeconds(b) ?? -1) - (this.uptimeSeconds(a) ?? -1)) || byName(a, b),
+			signal: (a, b) => (this.orDefault(b.rssi, -999) - this.orDefault(a.rssi, -999)) || byName(a, b),
+			uptime: (a, b) => (this.orDefault(this.uptimeSeconds(b), -1) - this.orDefault(this.uptimeSeconds(a), -1)) || byName(a, b),
 			recent: (a, b) => (b.firstSeen - a.firstSeen) || byName(a, b)
 		}[this.config.sortBy] || byName;
 		return list.sort(cmp);
@@ -321,7 +326,7 @@ Module.register("MMM-AsusDevices", {
 	renderError (fatal) {
 		const err = this.error || { message: "Unknown error" };
 		const box = this.el("div", `asusdev-error xsmall${fatal ? "" : " dimmed"}`);
-		const icon = this.el("i", "fa-solid fa-triangle-exclamation");
+		const icon = this.el("i", "fas fa-exclamation-triangle");
 		box.appendChild(icon);
 		let text = ` ${err.message}`;
 		if (!fatal && this.snapshot) {
@@ -355,9 +360,9 @@ Module.register("MMM-AsusDevices", {
 		switch (col) {
 			case "icon": {
 				let icon = "fa-ethernet";
-				if (isDeparted) icon = "fa-arrow-right-from-bracket";
+				if (isDeparted) icon = "fa-sign-out-alt";
 				else if (d.wireless) icon = "fa-wifi";
-				td.appendChild(this.el("i", `fa-solid ${icon}`));
+				td.appendChild(this.el("i", `fas ${icon}`));
 				break;
 			}
 			case "name": {

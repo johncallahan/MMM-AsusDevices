@@ -28,9 +28,17 @@ cd MMM-AsusDevices
 npm run install-ssh   # installs ssh2 and skips its optional native add-on (cpu-features)
 ```
 
-The module needs **Node 18 or newer** (MagicMirror 2.38 itself needs Node 22). Check with `node -v`. If you see
-`SyntaxError` in `node_modules/buildcheck/lib/index.js` with `catch {}`, the `node` on your PATH is very old (older
-than v10). Use the same Node that runs MagicMirror, for example by putting your nvm or NodeSource `node` first on PATH.
+### Compatibility
+
+| | Works with |
+|---|---|
+| MagicMirror | 2.10 and newer (tested on 2.10 and 2.38) |
+| Node.js, `method: "http"` | 8 and newer (tested on 8, 10, 12 and 22) |
+| Node.js, `method: "ssh"` | 10.16 and newer (required by the `ssh2` library) |
+
+On old MagicMirror versions, a syntax error in any module is reported as
+*"WARNING! Could not validate config file … Please correct syntax errors at or above this line: …/node_helper.js"*.
+That usually means a module needs a newer Node than the one MagicMirror runs on. Check with `node -v`.
 
 Before you edit the mirror config, check that the module can talk to your router:
 

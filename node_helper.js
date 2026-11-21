@@ -9,7 +9,13 @@
 "use strict";
 
 const NodeHelper = require("node_helper");
-const Log = require("logger");
+// MagicMirror 2.15+ provides a "logger" module; older versions don't.
+let Log;
+try {
+	Log = require("logger");
+} catch (e) {
+	Log = console;
+}
 const { AsusHttpClient } = require("./lib/httpClient");
 const { AsusSshClient } = require("./lib/sshClient");
 const { DevicePoller } = require("./lib/poller");
@@ -31,7 +37,7 @@ module.exports = NodeHelper.create({
 	},
 
 	socketNotificationReceived (notification, payload) {
-		if (notification !== "ASUSDEV_START" || !payload?.identifier) return;
+		if (notification !== "ASUSDEV_START" || !payload || !payload.identifier) return;
 		const { identifier, config } = payload;
 		const key = connectionKey(config);
 		const existing = this.instances.get(identifier);
